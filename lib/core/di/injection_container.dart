@@ -1,0 +1,44 @@
+import 'package:get_it/get_it.dart';
+import '../network/api_client.dart';
+
+// Auth Imports
+import '../../features/auth/data/datasources/auth_remote_datasource.dart';
+import '../../features/auth/data/repositories/auth_repository_impl.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/auth/domain/usecases/login.dart';
+import '../../features/auth/presentation/provider/auth_provider.dart';
+
+// Verification Imports
+import '../../features/verification/data/datasources/verification_remote_datasource.dart';
+import '../../features/verification/presentation/provider/verification_provider.dart';
+
+// Listings Imports
+import '../../features/listings/data/datasources/listings_remote_datasource.dart';
+import '../../features/listings/data/repositories/listings_repository_impl.dart';
+import '../../features/listings/domain/repositories/listings_repository.dart';
+import '../../features/listings/presentation/provider/listings_provider.dart';
+
+final sl = GetIt.instance;
+
+Future<void> init() async {
+  // --- FEATURES ---
+
+  // 1. AUTHENTICATION
+  sl.registerFactory(() => AuthProvider(sl()));
+  sl.registerLazySingleton(() => Login(sl()));
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
+  sl.registerLazySingleton(() => AuthRemoteDataSource(sl()));
+
+  // 2. VERIFICATION
+  // Use registerFactory for Providers so they reset when the screen closes
+  sl.registerFactory(() => VerificationProvider(sl())); 
+  sl.registerLazySingleton(() => VerificationRemoteDataSource(sl()));
+
+  // 3. LISTINGS (Marketplace)
+  sl.registerFactory(() => ListingsProvider(sl()));
+  sl.registerLazySingleton<ListingsRepository>(() => ListingsRepositoryImpl(sl()));
+  sl.registerLazySingleton(() => ListingsRemoteDataSource(sl()));
+
+  // --- CORE ---
+  sl.registerLazySingleton(() => ApiClient());
+}
