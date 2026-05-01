@@ -9,18 +9,44 @@ class ListingsRepositoryImpl implements ListingsRepository {
 
   @override
   Future<List<Listing>> getListings() async {
-    final List<dynamic> rawData = await remoteDataSource.fetchListings();
-    
-    return rawData.map((json) => Listing(
-      id: json['_id'],
-      title: json['title'],
-      description: json['description'],
-      price: (json['price'] as num).toDouble(),
-      images: List<String>.from(json['images']),
-      category: json['category'],
-      likes: json['likes'] ?? 0,
-      isVerifiedSeller: json['seller']?['isVerified'] ?? false,
-      createdAt: DateTime.parse(json['createdAt']),
-    )).toList();
+    try {
+      // 1. Fetch raw data from the data source
+      final dynamic responseData = await remoteDataSource.fetchListings();
+      
+      // 2. Handle cases where the backend wraps data in a 'data' field
+      // (e.g., { "success": true, "data": [...] })
+      final List<dynamic> list;
+      if (responseData is List) {
+        list = responseData;
+      } else if (responseData is Map && responseData['data'] is List) {
+        list = responseData['data'];
+      } else {
+        return [];
+      }
+
+      // 3. CRITICAL FIX: Explicitly map to <Listing> type
+      return list.map<Listing>((json) => Listing.fromJson(json)).toList();
+      
+    } catch (e) {
+      print("Repository Error: $e");
+      return []; // Return empty list instead of crashing the UI
+    }
+  }
+
+  @override
+  Future<void> createListing({
+    required String title, 
+    required String description, 
+    required double price, 
+    required String category, 
+    required List<String> imagePaths
+  }) async {
+    await remoteDataSource.uploadListing(
+      title: title,
+      description: description,
+      price: price,
+      category: category,
+      imagePaths: imagePaths,
+    );
   }
 }

@@ -11,9 +11,14 @@ import 'features/verification/presentation/provider/verification_provider.dart';
 
 // Import Screens
 import 'features/auth/presentation/screens/login_screen.dart';
+import 'features/auth/presentation/screens/register_screen.dart';
 import 'features/listings/presentation/screens/listings_screen.dart';
 import 'features/verification/presentation/screens/verification_screen.dart';
 
+
+import 'features/home/presentation/screens/home_screen.dart'; // Adjust path if needed
+import 'features/home/home_injection.dart'; // Import Home feature DI setup
+import 'features/home/presentation/provider/home_provider.dart';
 void main() async {
   // 1. Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +40,7 @@ class HaHuMarketApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => di.sl<AuthProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<ListingsProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<VerificationProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<HomeProvider>()),
       ],
       child: MaterialApp(
         title: 'HaHu Market',
@@ -59,9 +65,9 @@ class HaHuMarketApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (context) => const LoginScreen(),
-          '/home': (context) => const ListingsScreen(),
+          '/home': (context) => const HomeScreen(),
           '/verification': (context) => const VerificationScreen(),
-          // Note: Register screen can be added here once created
+          '/register': (context) => const RegisterScreen(),
         },
       ),
     );

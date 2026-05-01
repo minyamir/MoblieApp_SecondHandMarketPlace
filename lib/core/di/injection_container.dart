@@ -18,11 +18,13 @@ import '../../features/listings/data/repositories/listings_repository_impl.dart'
 import '../../features/listings/domain/repositories/listings_repository.dart';
 import '../../features/listings/presentation/provider/listings_provider.dart';
 
+import '../../features/home/home_injection.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
   // --- FEATURES ---
-
+initHome(); // Initialize Home feature dependencies
   // 1. AUTHENTICATION
   sl.registerFactory(() => AuthProvider(sl()));
   sl.registerLazySingleton(() => Login(sl()));
@@ -35,8 +37,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => VerificationRemoteDataSource(sl()));
 
   // 3. LISTINGS (Marketplace)
-  sl.registerFactory(() => ListingsProvider(sl()));
-  sl.registerLazySingleton<ListingsRepository>(() => ListingsRepositoryImpl(sl()));
+  sl.registerFactory(() => ListingsProvider());
+ 
+sl.registerLazySingleton<ListingsRepository>(() => ListingsRepositoryImpl(sl()));
   sl.registerLazySingleton(() => ListingsRemoteDataSource(sl()));
 
   // --- CORE ---

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../../../core/network/api_client.dart'; 
+import '../../../../core/di/injection_container.dart'; 
 import '../../domain/entities/listing.dart';
-import '../../data/datasources/listings_remote_datasource.dart';
 
 class ListingsProvider extends ChangeNotifier {
-  final ListingsRemoteDataSource remoteDataSource;
   List<Listing> _listings = [];
   bool _isLoading = false;
-
-  ListingsProvider(this.remoteDataSource);
 
   List<Listing> get listings => _listings;
   bool get isLoading => _isLoading;
@@ -17,29 +15,20 @@ class ListingsProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawData = await remoteDataSource.fetchListings();
+      // Now 'sl' and 'ApiClient' will be recognized
+      final response = await sl<ApiClient>().get('/listings'); 
       
-      // Map JSON to Entities
-      _listings = rawData.map((json) => Listing(
-        id: json['_id'],
-        title: json['title'],
-        description: json['description'],
-        price: json['price'].toDouble(),
-        images: List<String>.from(json['images']),
-        category: json['category'],
-        likes: json['likes'] ?? 0,
-        isVerifiedSeller: json['seller']['isVerified'] ?? false,
-        createdAt: DateTime.parse(json['createdAt']),
-      )).toList();
+      final List<dynamic> rawData = response.data['data'];
 
-      // APPLY SMART RANKING: Sort by rankingScore descending
-      _listings.sort((a, b) => b.rankingScore.compareTo(a.rankingScore));
+      // Mapping and casting to List<Listing>
+      _listings = rawData.map((item) => Listing.fromJson(item)).toList().cast<Listing>();
 
-    } catch (e) {
-      debugPrint("Error loading listings: $e");
-    } finally {
       _isLoading = false;
-      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      debugPrint("Error loading listings: $e");
     }
+    
+    notifyListeners();
   }
 }

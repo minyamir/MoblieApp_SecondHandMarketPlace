@@ -8,6 +8,7 @@ class Listing {
   final int likes;
   final bool isVerifiedSeller;
   final DateTime createdAt;
+  final String location; // Ensure this is here
 
   Listing({
     required this.id,
@@ -19,14 +20,38 @@ class Listing {
     required this.likes,
     required this.isVerifiedSeller,
     required this.createdAt,
+    required this.location,
   });
 
-  // Frontend Ranking Logic
-  double get rankingScore {
-    int freshnessHours = DateTime.now().difference(createdAt).inHours;
-    double score = (likes * 2.0); // Likes carry heavy weight
-    if (isVerifiedSeller) score += 10; // Bonus for verified sellers
-    score -= (freshnessHours * 0.1); // Slight penalty for older posts
-    return score;
+  factory Listing.fromJson(Map<String, dynamic> json) {
+    return Listing(
+      id: json['_id'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      price: (json['price'] ?? 0).toDouble(),
+      category: json['category'] ?? '',
+      location: json['location'] ?? 'Unknown',
+      
+      // FIX FOR: 'List<dynamic>' is not a subtype of type 'int'
+  // Inside Listing.fromJson in listing.dart
+likes: (json['likes'] is List) 
+    ? (json['likes'] as List).length 
+    : (json['likesCount'] ?? 0),
+
+      isVerifiedSeller: (json['seller'] != null && json['seller'] is Map)
+          ? (json['seller']['isVerified'] ?? false)
+          : false,
+
+      createdAt: json['createdAt'] != null 
+          ? DateTime.parse(json['createdAt']) 
+          : DateTime.now(),
+
+      images: json['images'] != null 
+          ? List<String>.from(json['images']).map((img) {
+              String cleanPath = img.replaceAll(r'\', '/');
+              return "http://localhost:5000/$cleanPath"; 
+            }).toList() 
+          : [],
+    );
   }
 }

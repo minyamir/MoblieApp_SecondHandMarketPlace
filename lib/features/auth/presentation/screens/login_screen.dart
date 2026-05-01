@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = context.watch<AuthProvider>();
 
     return Scaffold(
       appBar: AppBar(title: const Text("HaHu Market Login")),
@@ -24,35 +24,37 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: "Email"),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: "Password"),
-              obscureText: true,
-            ),
-            const SizedBox(height: 30),
-            authProvider.isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: () async {
-                      final success = await authProvider.login(
-                        _emailController.text,
-                        _passwordController.text,
-                      );
-                      if (success && mounted) {
-                        Navigator.pushReplacementNamed(context, '/home');
-                      }
-                    },
-                    child: const Text("Login"),
-                  ),
-            if (authProvider.error != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Text(authProvider.error!, style: const TextStyle(color: Colors.red)),
-              ),
+            TextField(controller: _emailController, decoration: const InputDecoration(labelText: "Email")),
+            TextField(controller: _passwordController, decoration: const InputDecoration(labelText: "Password"), obscureText: true),
+            TextButton(
+                   onPressed: () => Navigator.pushNamed(context, '/register'),
+               child: const Text("Don't have an account? Register here"),
+                     ),
+            const SizedBox(height: 20),
+            authProvider.isLoading 
+              ? const CircularProgressIndicator()
+              : ElevatedButton(
+                 onPressed: () async {
+  // Use .trim() to avoid errors caused by accidental spaces in email
+  final success = await authProvider.login(
+    _emailController.text.trim(), 
+    _passwordController.text.trim(),
+  );
+  
+  if (success && mounted) {
+    Navigator.pushReplacementNamed(context, '/home');
+  } else if (mounted) {
+    // THIS WILL TELL YOU WHY NOTHING IS HAPPENING
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(authProvider.error ?? "Login failed. Check your connection."),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+}, 
+                  child: const Text("Login")
+                ),
           ],
         ),
       ),
