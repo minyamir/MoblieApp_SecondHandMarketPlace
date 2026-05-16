@@ -3,7 +3,11 @@ import 'package:provider/provider.dart';
 import '../../../listings/presentation/provider/listings_provider.dart';
 import '../widgets/home_header.dart';
 import '../widgets/category_list.dart';
+import '../pages/markets_screen.dart';
+import '../../../profile/presentation/screens/profile_screen.dart';  
+import '../pages/trade_screen.dart';
 
+import '../pages/my_listings_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -36,14 +40,20 @@ class _HomeScreenState extends State<HomeScreen> {
           const Expanded(child: ListingsDisplayWidget()),
         ],
       ),
-      // Index 1: Markets
-      const Center(child: Text("Markets Screen")),
-      // Index 2: Trade
-      const Center(child: Text("Trade Screen")),
+   // Index 0: Home Tab
+       //HomeTabContent(), 
+      
+      // Index 1: Markets Tab (the new screen you are creating)
+      const MarketsScreen(),  
+      
+      // Index 2: Trade Tab
+      const  TradeScreen(),    
+      
       // Index 3: My Listing
-      const Center(child: Text("My Listings Screen")),
-      // Index 4: Profile
-      const Center(child: Text("Profile Screen")),
+      const MyListingsScreen(), 
+      
+      // Index 4: Profile Tab
+      const ProfileScreen(),
     ];
   }
 
@@ -105,6 +115,7 @@ Widget build(BuildContext context) {
     ),
   );
 }
+
 }
 
 
@@ -156,55 +167,48 @@ class ProductCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Product Image
+          // Image Section
           Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-              child: item.images.isNotEmpty
-                  ? Image.network(
-                      item.images[0],
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Center(child: Icon(Icons.broken_image, color: Colors.grey)),
-                    )
-                  : Container(
-                      color: Colors.grey[200],
-                      child: const Icon(Icons.image, color: Colors.grey),
-                    ),
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  image: NetworkImage(item.images.isNotEmpty ? item.images[0] : 'placeholder_url'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
-          // Product Details
+          // Info Section
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item.title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "${item.price} ETB",
-                  style: const TextStyle(
-                    color: Color(0xFF0052CC), // The blue color from your navbar
-                    fontWeight: FontWeight.w600,
-                  ),
+                Text(item.title, 
+                  maxLines: 1, 
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("${item.price} ETB", 
+                      style: const TextStyle(color: Color(0xFF0052CC), fontWeight: FontWeight.w900)),
+                    const Icon(Icons.add_circle, color: Color(0xFF0052CC), size: 28),
+                  ],
                 ),
               ],
             ),
@@ -213,4 +217,8 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
+
+
+  
 }
+
