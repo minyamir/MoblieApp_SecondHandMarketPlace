@@ -1,17 +1,54 @@
-# frontend
+# Second-Hand Marketplace System
 
-A new Flutter project.
+A secure second-hand marketplace platform where users can safely buy and sell used products with identity verification, real-time chat, secure wallet transactions, GPS-based delivery tracking, and intelligent scam detection.
 
-## Getting Started
+## Main Features
 
-This project is a starting point for a Flutter application.
+### User Verification
 
-A few resources to get you started if this is your first Flutter project:
+* Users register using their National ID for identity verification.
+* Verified accounts increase trust and reduce fake users and fraud.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### Second-Hand Product Marketplace
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Users can post and manage second-hand items for sale.
+* Categories include tools, electronics, furniture, clothes, and more.
+* Buyers can browse, search, and contact sellers directly.
+
+### Secure Wallet System
+
+* Integrated wallet for safe payments between buyers and sellers.
+* Funds are protected during transactions until delivery is completed.
+* Reduces payment scams and improves transaction security.
+
+### Real-Time Chat System
+
+* Buyers and sellers communicate through an in-app messaging system.
+* Supports negotiation, product discussion, and delivery coordination.
+
+### AI Scam & Illegal Activity Detection
+
+* The system monitors chat messages to detect:
+
+  * Scam attempts
+  * Fraudulent behavior
+  * Illegal trading
+  * Harmful or suspicious language
+* Suspicious messages are automatically blocked.
+* Users who violate rules receive warnings or temporary restrictions.
+
+### GPS Delivery Tracking
+
+* Delivery system with live GPS tracking.
+* Buyers can track the location of deliveries in real time.
+* Improves delivery transparency and safety.
+
+### Safety & Moderation
+
+* Automated moderation system helps maintain a safe marketplace.
+* Repeat offenders can be suspended or banned.
+* Admin dashboard for monitoring reports and platform activity.
+
+## Goal of the Project
+
+The goal of this platform is to create a trusted, secure, and intelligent digital marketplace for second-hand products by combining identity verification, secure payments, smart moderation, and real-time tracking technologies.
