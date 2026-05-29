@@ -12,7 +12,7 @@ A secure second-hand marketplace platform where users can safely buy and sell us
 ### Second-Hand Product Marketplace
 
 * Users can post and manage second-hand items for sale.
-* Categories include tools, electronics, furniture, clothes, and more.
+* Categories include tools, electronics, furniture, clothes, Vehicles and more.
 * Buyers can browse, search, and contact sellers directly.
 
 ### Secure Wallet System
@@ -52,3 +52,5 @@ A secure second-hand marketplace platform where users can safely buy and sell us
 ## Goal of the Project
 
 The goal of this platform is to create a trusted, secure, and intelligent digital marketplace for second-hand products by combining identity verification, secure payments, smart moderation, and real-time tracking technologies.
+
+As the same time We are going to build the Advanced moblie App.
