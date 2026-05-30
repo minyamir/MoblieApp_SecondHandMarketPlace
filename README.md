@@ -53,4 +53,4 @@ A secure second-hand marketplace platform where users can safely buy and sell us
 
 The goal of this platform is to create a trusted, secure, and intelligent digital marketplace for second-hand products by combining identity verification, secure payments, smart moderation, and real-time tracking technologies.
 
-As the same time We are going to build the Advanced  moblie App.
+As the same time We are going to build the   moblie App.
