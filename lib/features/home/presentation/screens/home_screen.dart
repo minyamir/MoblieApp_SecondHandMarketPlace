@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../listings/presentation/provider/listings_provider.dart';
-import '../widgets/home_header.dart';
-import '../widgets/category_list.dart';
 import '../pages/markets_screen.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';  
 import '../pages/trade_screen.dart';
@@ -17,8 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
 
   @override
   void initState() {
@@ -26,12 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ListingsProvider>().loadListings();
     });
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 
   void _navigateToTab(int index) {
@@ -43,81 +33,136 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      _HomeDashboardContent(
-        searchController: _searchController,
-        onSearchChanged: (val) => setState(() => _searchQuery = val),
-        onInitiateTrade: () => _navigateToTab(2), // Redirect to Trade Tab
-      ),
-      const MarketsScreen(),  
+      const _HomeDashboardContent(),
+      MarketScreen(),  
       const TradeScreen(),    
       const MyListingsScreen(), 
       const ProfileScreen(),
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB), 
+      backgroundColor: const Color(0xFF070B19), // Match dark canvas backdrop layout
       body: SafeArea(
-        child: IndexedStack(
-          index: _selectedIndex,
-          children: pages,
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              spreadRadius: 2,
+        child: Column(
+          children: [
+            const _TopStatusBadgeBar(),
+            Expanded(
+              child: IndexedStack(
+                index: _selectedIndex,
+                children: pages,
+              ),
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+      ),
+      bottomNavigationBar: _buildCustomBottomNavBar(),
+    );
+  }
+
+  Widget _buildCustomBottomNavBar() {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFF090E1A),
+        border: Border(top: BorderSide(color: Color(0xFF151C2C), width: 1)),
+      ),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xFF090E1A),
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color(0xFF00E676),
+        unselectedItemColor: const Color(0xFF334155),
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        unselectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+        onTap: _navigateToTab,
+        items: [
+          const BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Icon(Icons.home_filled, size: 26),
+            ),
+            label: 'Home',
           ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
-            currentIndex: _selectedIndex,
-            selectedItemColor: const Color(0xFF0052CC), 
-            unselectedItemColor: Colors.grey.shade400,
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-            unselectedLabelStyle: const TextStyle(fontSize: 12),
-            onTap: _navigateToTab,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.storefront_outlined), label: 'Markets'),
-              BottomNavigationBarItem(icon: Icon(Icons.swap_horizontal_circle_outlined), label: 'Trade'),
-              BottomNavigationBarItem(icon: Icon(Icons.format_list_bulleted), label: 'My Listing'),
-              BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-            ],
+          const BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Icon(Icons.business_center_outlined, size: 26),
+            ),
+            label: 'Market',
           ),
-        ),
+          const BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Icon(Icons.swap_horizontal_circle_outlined, size: 26),
+            ),
+            label: 'Trades',
+          ),
+          const BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Icon(Icons.storefront_outlined, size: 26),
+            ),
+            label: 'Listings',
+          ),
+          const BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Icon(Icons.person_outline_rounded, size: 26),
+            ),
+            label: 'Identity',
+          ),
+        ],
       ),
     );
   }
 }
 
-/// Main Scrollable Dashboard Content
-class _HomeDashboardContent extends StatelessWidget {
-  final TextEditingController searchController;
-  final ValueChanged<String> onSearchChanged;
-  final VoidCallback onInitiateTrade;
+/// Top Status Pill Component
+class _TopStatusBadgeBar extends StatelessWidget {
+  const _TopStatusBadgeBar();
 
-  const _HomeDashboardContent({
-    required this.searchController,
-    required this.onSearchChanged,
-    required this.onInitiateTrade,
-  });
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: const Color(0xFF00E676).withOpacity(0.08),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFF00E676).withOpacity(0.3), width: 1),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Icon(Icons.verified_user_outlined, color: Color(0xFF00E676), size: 12),
+                SizedBox(width: 4),
+                Text("ሀሁ Market", style: TextStyle(color: Color(0xFF00E676), fontSize: 12, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              Container(width: 4, height: 4, decoration: const BoxDecoration(color: Colors.white54, shape: BoxShape.circle)),
+              const SizedBox(width: 3),
+              Container(width: 4, height: 4, decoration: const BoxDecoration(color: Colors.white54, shape: BoxShape.circle)),
+              const SizedBox(width: 3),
+              Container(width: 18, height: 10, decoration: BoxDecoration(border: Border.all(color: Colors.white54), borderRadius: BorderRadius.circular(2))),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+/// Core Dashboard Body View
+class _HomeDashboardContent extends StatelessWidget {
+  const _HomeDashboardContent();
 
   @override
   Widget build(BuildContext context) {
@@ -126,180 +171,319 @@ class _HomeDashboardContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HomeHeader(),
-          
-          // 1. Search Bar Filter Matrix
+          // Greeting Panel Row
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: TextField(
-              controller: searchController,
-              onChanged: onSearchChanged,
-              decoration: InputDecoration(
-                hintText: "Search tools by name or max price...",
-                prefixIcon: const Icon(Icons.search, color: Color(0xFF0052CC)),
-                suffixIcon: const Icon(Icons.tune_rounded, color: Colors.grey),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
+            padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("GOOD MORNING", style: TextStyle(color: Color(0xFF475569), fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 1.5)),
+                    SizedBox(height: 6),
+                    Text("Bereket Alemu", style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold, letterSpacing: -0.5)),
+                  ],
                 ),
-              ),
+                Stack(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0F172A),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: const Icon(Icons.notifications_none_rounded, color: Colors.white, size: 24),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(color: Color(0xFF00E676), shape: BoxShape.circle),
+                        child: const Text("3", style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold)),
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
           ),
 
-          // 2. Platform Metrics Card with Interactive Bars
-          const _PlatformStatsCard(),
-          
+          // Three Metric Cards Row
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Text("Browse Categories", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _MetricCard(
+                    icon: Icons.shield_outlined,
+                    iconColor: Color(0xFF00E676),
+                    value: "47,312",
+                    label: "Verified Users",
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: _MetricCard(
+                    icon: Icons.layers_outlined,
+                    iconColor: Color(0xFF2F80ED),
+                    value: "12,840",
+                    label: "Active Listings",
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: _MetricCard(
+                    icon: Icons.account_balance_wallet_outlined,
+                    iconColor: Color(0xFFF2994A),
+                    value: "8.4M",
+                    label: "ETB in Escrow",
+                  ),
+                ),
+              ],
+            ),
           ),
-          CategoryList(),
-          
-          // 3. Highly Rated Tools Feed Grid
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Text("Highly Rated Featured Tools", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ),
-          _FeaturedToolsGrid(onTradeAction: onInitiateTrade),
 
-          // 4. Trust Testimonials Carousel
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Text("Community Success Stories", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ),
-          const _TestimonialsCarousel(),
+          const SizedBox(height: 20),
 
-          // 5. NEW: Platform Trust & Core Services Section (Bottom Highlight)
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-            child: Text("Why Trade on HaHu Market?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          // Trade Volume Chart Component
+          const _TradeVolumeGraphCard(),
+
+          const SizedBox(height: 28),
+          
+          // Section Heading Row
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Top Rated Equipment", 
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
+                ),
+                Row(
+                  children: const [
+                    Text("See all", style: TextStyle(color: Color(0xFF00E676), fontSize: 15, fontWeight: FontWeight.w600)),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF00E676), size: 12),
+                  ],
+                ),
+              ],
+            ),
           ),
+          
+          const SizedBox(height: 16),
+          const _FeaturedToolsHorizontalList(),
+
+          const SizedBox(height: 24),
           const _PlatformServicesShowcase(),
-          
-          const SizedBox(height: 40),
+          const SizedBox(height: 30),
         ],
       ),
     );
   }
 }
 
-/// UI Component: Platform Growth Overview Stats & Bar Graphic
-class _PlatformStatsCard extends StatelessWidget {
-  const _PlatformStatsCard();
+/// UI Component: Metrics Sub-Card
+class _MetricCard extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String value;
+  final String label;
+
+  const _MetricCard({
+    required this.icon,
+    required this.iconColor,
+    required this.value,
+    required this.label,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(14),
+      height: 130,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0052CC), Color(0xFF1E3A8A)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
+        color: const Color(0xFF0D1527), 
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0xFF151D30), width: 1),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(color: iconColor.withOpacity(0.06), shape: BoxShape.circle),
+            child: Icon(icon, color: iconColor, size: 18),
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text("Active Marketplace Volume", style: TextStyle(color: Colors.white70, fontSize: 13)),
-              SizedBox(height: 6),
-              Text("12,450+ Users", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              Text("⚡ 420 escrow orders secured today", style: TextStyle(color: Colors.greenAccent, fontSize: 12, fontWeight: FontWeight.w500)),
+            children: [
+              Text(value, style: TextStyle(color: iconColor, fontSize: 18, fontWeight: FontWeight.w900)),
+              const SizedBox(height: 2),
+              Text(label, style: const TextStyle(color: Color(0xFF475569), fontSize: 11, fontWeight: FontWeight.w500)),
             ],
-          ),
-          // Clean Visual Representation for Activity Trends
-          SizedBox(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildGraphBar(18),
-                _buildGraphBar(28),
-                _buildGraphBar(22),
-                _buildGraphBar(38),
-                _buildGraphBar(48),
-              ],
-            ),
           )
         ],
       ),
     );
   }
+}
 
-  Widget _buildGraphBar(double height) {
+/// UI Component: Custom Graph Card
+class _TradeVolumeGraphCard extends StatelessWidget {
+  const _TradeVolumeGraphCard();
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: 6,
-      height: height,
-      margin: const EdgeInsets.only(left: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(4),
+        color: const Color(0xFF0D1527),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFF151D30)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text("Trade Volume", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 4),
+                  Text("Nov 2025 — May 2026", style: TextStyle(color: Color(0xFF475569), fontSize: 12)),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(color: const Color(0xFF00E676).withOpacity(0.08), borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  children: const [
+                    Icon(Icons.trending_up_rounded, color: Color(0xFF00E676), size: 14),
+                    SizedBox(width: 4),
+                    Text("+35.5%", style: TextStyle(color: Color(0xFF00E676), fontSize: 12, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            height: 80,
+            width: double.infinity,
+            child: CustomPaint(painter: _ChartLinePainter()),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text("Dec", style: TextStyle(color: Color(0xFF475569), fontSize: 11)),
+              Text("Jan", style: TextStyle(color: Color(0xFF475569), fontSize: 11)),
+              Text("Feb", style: TextStyle(color: Color(0xFF475569), fontSize: 11)),
+              Text("Mar", style: TextStyle(color: Color(0xFF475569), fontSize: 11)),
+              Text("Apr", style: TextStyle(color: Color(0xFF475569), fontSize: 11)),
+              Text("May", style: TextStyle(color: Color(0xFF475569), fontSize: 11)),
+            ],
+          )
+        ],
       ),
     );
   }
 }
 
-/// UI Component: Biometric Verified Feedback Swiper Card
-class _TestimonialsCarousel extends StatelessWidget {
-  const _TestimonialsCarousel();
+class _ChartLinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final linePaint = Paint()
+      ..color = const Color(0xFF00E676)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5;
+
+    final fillPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..shader = LinearGradient(
+        colors: [const Color(0xFF00E676).withOpacity(0.12), const Color(0xFF00E676).withOpacity(0.0)],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ).createShader(Rect.fromLTRB(0, 0, size.width, size.height));
+
+    final path = Path();
+    path.moveTo(0, size.height * 0.75);
+    path.cubicTo(size.width * 0.35, size.height * 0.70, size.width * 0.65, size.height * 0.50, size.width, size.height * 0.20);
+
+    final fillPath = Path.from(path)..lineTo(size.width, size.height)..lineTo(0, size.height)..close();
+    canvas.drawPath(fillPath, fillPaint);
+    canvas.drawPath(path, linePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// UI Component: Clean Horizontal Equipment Slider
+class _FeaturedToolsHorizontalList extends StatelessWidget {
+  const _FeaturedToolsHorizontalList();
 
   @override
   Widget build(BuildContext context) {
-    final reviews = [
-      {"name": "Bekele T.", "msg": "The biometric badge gives me immense confidence. Traded a heavy generator complete scam-free!", "loc": "Bahir Dar"},
-      {"name": "Selam W.", "msg": "Secure escrow release protection saved my payment when checking power tool mechanics.", "loc": "Addis Ababa"}
-    ];
+    final provider = context.watch<ListingsProvider>();
+
+    if (provider.isLoading && provider.listings.isEmpty) {
+      return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00E676))));
+    }
 
     return SizedBox(
-      height: 130,
+      height: 200,
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        itemCount: reviews.length,
-        itemBuilder: (context, i) {
+        itemCount: provider.listings.isEmpty ? 3 : provider.listings.length,
+        itemBuilder: (context, index) {
+          final title = provider.listings.isEmpty ? "Heavy Drill" : provider.listings[index].title;
+          final price = provider.listings.isEmpty ? "1,200" : "${provider.listings[index].price}";
+
           return Container(
-            width: 290,
-            margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-            padding: const EdgeInsets.all(16),
+            width: 160,
+            margin: const EdgeInsets.only(right: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: const Color(0xFF0D1527),
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                )
-              ],
+              border: Border.all(color: const Color(0xFF151D30)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.verified_user, color: Colors.green, size: 16),
-                    const SizedBox(width: 6),
-                    Text(reviews[i]["name"]!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                    Text(" • ${reviews[i]["loc"]}", style: TextStyle(color: Colors.grey.shade500, fontSize: 11)),
-                  ],
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF151D30),
+                      borderRadius: BorderRadius.circular(16),
+                      image: const DecorationImage(
+                        image: NetworkImage('https://via.placeholder.com/150'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  '"${reviews[i]["msg"]}"',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: Colors.black87),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, maxLines: 1, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
+                      const SizedBox(height: 4),
+                      Text("$price ETB", style: const TextStyle(color: Color(0xFF00E676), fontWeight: FontWeight.bold, fontSize: 13)),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -310,72 +494,45 @@ class _TestimonialsCarousel extends StatelessWidget {
   }
 }
 
-/// UI Component: NEW Platform Services Summary Grid (Bottom Layout)
+/// Bottom Features Showcase (Why Choose Us) - Fixed explicit cast issues
 class _PlatformServicesShowcase extends StatelessWidget {
   const _PlatformServicesShowcase();
 
   @override
   Widget build(BuildContext context) {
-    final services = [
-      {
-        "icon": Icons.gpp_good_rounded,
-        "title": "AI Identity Check",
-        "desc": "Every user completes National ID & biometric verification for absolute anti-fraud safety.",
-        "color": const Color(0xFFE6F0FF),
-        "iconColor": const Color(0xFF0052CC)
-      },
-      {
-        "icon": Icons.account_balance_wallet_rounded,
-        "title": "Secure Escrow Wallet",
-        "desc": "Payments stay securely inside our protection lockup vault until you inspect the tool physically.",
-        "color": const Color(0xFFE6FFFA),
-        "iconColor": const Color(0xFF00A389)
-      },
-      {
-        "icon": Icons.delivery_dining_rounded,
-        "title": "Platform Delivery Riders",
-        "desc": "Automated shipping and delivery handling via verified logistics agents straight to your door.",
-        "color": const Color(0xFFFFF4E6),
-        "iconColor": const Color(0xFFFF9900)
-      }
+    final List<Map<String, dynamic>> services = [
+      {"icon": Icons.gpp_good_rounded, "title": "AI Identity Check", "desc": "National ID & biometric user validation verification flow."},
+      {"icon": Icons.account_balance_wallet_rounded, "title": "Secure Escrow Wallet", "desc": "Safe asset protection secure fund storage options."}
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: services.map((srv) {
           return Container(
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: const Color(0xFF0D1527),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.grey.shade100),
+              border: Border.all(color: const Color(0xFF151D30)),
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: srv["color"] as Color,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Icon(srv["icon"] as IconData, color: srv["iconColor"] as Color, size: 24),
-                ),
+                Icon(srv["icon"] as IconData, color: const Color(0xFF00E676), size: 24),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        srv["title"] as String,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF1E293B)),
+                        srv["title"] as String, // 👈 FIXED: Explicitly casted to String
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Text(
-                        srv["desc"] as String,
-                        style: TextStyle(fontSize: 12, color: Colors.grey.shade600, height: 1.4),
+                        srv["desc"] as String, // 👈 FIXED: Explicitly casted to String
+                        style: const TextStyle(fontSize: 12, color: Color(0xFF475569)),
                       ),
                     ],
                   ),
@@ -384,125 +541,6 @@ class _PlatformServicesShowcase extends StatelessWidget {
             ),
           );
         }).toList(),
-      ),
-    );
-  }
-}
-
-/// UI Component: Highly Rated Tools Feed Grid
-class _FeaturedToolsGrid extends StatelessWidget {
-  final VoidCallback onTradeAction;
-  const _FeaturedToolsGrid({required this.onTradeAction});
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = context.watch<ListingsProvider>();
-
-    if (provider.isLoading && provider.listings.isEmpty) {
-      return const Center(child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()));
-    }
-
-    if (provider.listings.isEmpty) {
-      return const Center(child: Padding(padding: EdgeInsets.all(20), child: Text("No high-rated tools online.")));
-    }
-
-    return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 0.73, 
-      ),
-      itemCount: provider.listings.length > 4 ? 4 : provider.listings.length,
-      itemBuilder: (context, index) {
-        final item = provider.listings[index];
-        return ProductCard(item: item, onTradePressed: onTradeAction);
-      },
-    );
-  }
-}
-
-/// Polished Product Card with Clean Architecture Trade Callbacks
-class ProductCard extends StatelessWidget {
-  final dynamic item;
-  final VoidCallback onTradePressed;
-  
-  const ProductCard({super.key, required this.item, required this.onTradePressed});
-
-  @override
-  Widget build(BuildContext context) {
-    final hasImage = item.images != null && item.images.isNotEmpty;
-    
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(18),
-                image: DecorationImage(
-                  image: NetworkImage(hasImage ? item.images[0] : 'https://via.placeholder.com/150'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.title ?? 'Generic Equipment', 
-                  maxLines: 1, 
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "${item.price ?? 0} ETB", 
-                      style: const TextStyle(color: Color(0xFF0052CC), fontWeight: FontWeight.w800, fontSize: 13),
-                    ),
-                    GestureDetector(
-                      onTap: onTradePressed,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF0052CC).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Text(
-                          "Trade",
-                          style: TextStyle(color: Color(0xFF0052CC), fontSize: 11, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

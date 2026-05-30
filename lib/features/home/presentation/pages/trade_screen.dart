@@ -1,99 +1,119 @@
 import 'package:flutter/material.dart';
-import '../widgets/sub_screen_header.dart';
 
 class TradeScreen extends StatelessWidget {
   const TradeScreen({super.key});
 
-  // Local mock database array to safely populate our custom design cards
+  // Upgraded live transaction state matrix data structure
   final List<Map<String, dynamic>> mockTrades = const [
     {
       "id": "TX-9082",
       "title": "Makita HR2630 Rotary Hammer",
-      "price": "12,500 ETB",
-      "image": "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=150",
+      "price": "12,500",
       "status": "AWAITING ESCROW",
       "statusColor": Color(0xFFFF9900),
-      "statusBg": Color(0xFFFFF5E6),
+      "progress": 0.35,
+      "milestone": "Waiting for buyer to fund vault lockup",
       "isBuying": true,
-      "party": "Seller: Abebe K."
+      "party": "Abebe K. (Seller)",
+      "rating": "4.9",
     },
     {
       "id": "TX-4412",
       "title": "DeWalt Cordless Drill 18V",
-      "price": "9,200 ETB",
-      "image": "https://images.unsplash.com/photo-1581147036324-c17da42fe5a8?w=150",
-      "status": "IN TRANSIT",
-      "statusColor": Color(0xFF0052CC),
-      "statusBg": Color(0xFFE8F0FE),
+      "price": "9,200",
+      "status": "FUNDS LOCKED",
+      "statusColor": Color(0xFF00E676),
+      "progress": 0.70,
+      "milestone": "Rider is delivering to drop-off station",
       "isBuying": true,
-      "party": "Seller: Chala T."
+      "party": "Chala T. (Seller)",
+      "rating": "4.8",
     },
     {
       "id": "TX-1109",
       "title": "Bosch Professional Angle Grinder",
-      "price": "7,800 ETB",
-      "image": "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=150",
+      "price": "7,800",
       "status": "COMPLETED",
-      "statusColor": Colors.green,
-      "statusBg": Color(0xFFE6F4EA),
+      "statusColor": Color(0xFF2F80ED),
+      "progress": 1.0,
+      "milestone": "Funds released to seller wallet",
       "isBuying": false,
-      "party": "Buyer: Helen S."
+      "party": "Helen S. (Buyer)",
+      "rating": "5.0",
     }
   ];
 
   @override
   Widget build(BuildContext context) {
-    // Filter down our map sets cleanly based on context roles
     final buyingTrades = mockTrades.where((t) => t["isBuying"] == true).toList();
     final sellingTrades = mockTrades.where((t) => t["isBuying"] == false).toList();
 
-    // DefaultTabController automatically binds TabBar and TabBarView seamlessly!
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FB),
+        backgroundColor: const Color(0xFF070B19), // Perfectly matches the Home Screen dark theme canvas
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SubScreenHeader(
-              title: "Trade Studio", 
-              subtitle: "Track, negotiate, and verify secure escrow deals"
-            ),
-
-            // Premium Segment Switcher Tabs Bar Card Frame
-            Container(
-              margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: TabBar(
-                labelColor: const Color(0xFF0052CC),
-                unselectedLabelColor: Colors.grey.shade600,
-                labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                indicatorSize: TabBarIndicatorSize.tab,
-                dividerColor: Colors.transparent,
-                indicator: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    )
-                  ],
-                ),
-                tabs: const [
-                  Tab(text: "Purchases"),
-                  Tab(text: "Sales Operations"),
+            // Custom High-Fidelity Studio Header Frame
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text("ESCROW PIPELINE", style: TextStyle(color: Color(0xFF00E676), fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 2.0)),
+                          SizedBox(height: 6),
+                          Text("Trade Studio", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold, letterSpacing: -0.5)),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(color: const Color(0xFF0D1527), borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFF151D30))),
+                        child: const Icon(Icons.tune_rounded, color: Color(0xFF00E676), size: 20),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
 
-            // Main View Switcher Pipeline Frame
+            // Segmented Cyber Capsule Selector Tab Bar
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0D1527),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: const Color(0xFF151D30)),
+              ),
+              child: TabBar(
+                labelColor: Colors.black,
+                unselectedLabelColor: const Color(0xFF64748B),
+                labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 0.3),
+                unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+                indicatorSize: TabBarIndicatorSize.tab,
+                dividerColor: Colors.transparent,
+                indicator: BoxDecoration(
+                  color: const Color(0xFF00E676), // High contrast neon brand interaction color
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                tabs: const [
+                  Tab(text: "Incoming Orders"),
+                  Tab(text: "Sales Channels"),
+                ],
+              ),
+            ),
+
+            // Main Active View Stack Pipeline
             Expanded(
               child: TabBarView(
+                physics: const BouncingScrollPhysics(),
                 children: [
                   buyingTrades.isEmpty ? _buildEmptyState() : _buildTradeList(context, buyingTrades),
                   sellingTrades.isEmpty ? _buildEmptyState() : _buildTradeList(context, sellingTrades),
@@ -106,129 +126,170 @@ class TradeScreen extends StatelessWidget {
     );
   }
 
-  /// Gorgeous Active Content Card List Builder
+  /// High Action Interactive Transaction Node Cards
   Widget _buildTradeList(BuildContext context, List<Map<String, dynamic>> trades) {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       physics: const BouncingScrollPhysics(),
       itemCount: trades.length,
       itemBuilder: (context, idx) {
         final trade = trades[idx];
+        
+        // 🛠️ FIXED: Safe explicit casting expression priority layout
+        final double progressValue = trade["progress"] as double;
+        final int progressPercent = (progressValue * 100).toInt();
 
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.02),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              )
-            ],
+            color: const Color(0xFF0D1527),
+            borderRadius: BorderRadius.circular(26),
+            border: Border.all(color: const Color(0xFF151D30)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Row 1: Tracking Code ID & Verified Status Pill Badge
+              // Header Layer: ID Badge + Status Capsule Glow Matrix
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    trade["id"] as String,
-                    style: TextStyle(color: Colors.grey.shade500, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 0.5),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(8)),
+                        child: Text(
+                          trade["id"] as String,
+                          style: const TextStyle(color: Color(0xFF94A3B8), fontWeight: FontWeight.bold, fontSize: 11),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Row(
+                        children: [
+                          const Icon(Icons.star, color: Color(0xFFF2994A), size: 14),
+                          const SizedBox(width: 2),
+                          Text(trade["rating"] as String, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12, fontWeight: FontWeight.bold)),
+                        ],
+                      )
+                    ],
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: trade["statusBg"] as Color,
-                      borderRadius: BorderRadius.circular(10),
+                      color: (trade["statusColor"] as Color).withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: (trade["statusColor"] as Color).withOpacity(0.2)),
                     ),
                     child: Text(
                       trade["status"] as String,
-                      style: TextStyle(color: trade["statusColor"] as Color, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 0.3),
+                      style: TextStyle(color: trade["statusColor"] as Color, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 0.5),
                     ),
                   )
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Divider(height: 1, color: Color(0xFFF1F5F9)),
+              
+              const SizedBox(height: 16),
+
+              // Item Title & Core Node Info Block
+              Text(
+                trade["title"] as String,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white, letterSpacing: -0.3),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                trade["party"] as String,
+                style: const TextStyle(color: Color(0xFF475569), fontSize: 13, fontWeight: FontWeight.w500),
               ),
 
-              // Row 2: Tool Thumb Image Layout & Info Details Block
-              Row(
-                children: [
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(16),
-                      image: DecorationImage(
-                        image: NetworkImage(trade["image"] as String),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          trade["title"] as String,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF1E293B)),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          trade["party"] as String,
-                          style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          trade["price"] as String,
-                          style: const TextStyle(color: Color(0xFF0052CC), fontWeight: FontWeight.w900, fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 20),
 
-              // Row 3: Interactive Action Execution Buttons Layer
+              // Live Milestone Pipeline Status Box
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF070B19),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: progressValue == 1.0 ? const Color(0xFF2F80ED) : const Color(0xFF00E676),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: (progressValue == 1.0 ? const Color(0xFF2F80ED) : const Color(0xFF00E676)).withOpacity(0.4),
+                            blurRadius: 6,
+                            spreadRadius: 2,
+                          )
+                        ]
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        trade["milestone"] as String,
+                        style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12, fontWeight: FontWeight.w500, height: 1.3),
+                      ),
+                    ),
+                    Text(
+                      "$progressPercent%",
+                      style: TextStyle(color: trade["statusColor"] as Color, fontSize: 12, fontWeight: FontWeight.w900),
+                    )
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Horizontal Minimal Progress Slider Bar Component
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: progressValue,
+                  backgroundColor: const Color(0xFF151D30),
+                  valueColor: AlwaysStoppedAnimation<Color>(trade["statusColor"] as Color),
+                  minHeight: 4,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Price Tags & Action Nodes Grid Integration Layer
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _openDealTracking(context, trade["id"] as String),
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey.shade200),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("ESCROW LOCKED", style: TextStyle(color: Color(0xFF475569), fontSize: 10, fontWeight: FontWeight.w600, letterSpacing: 0.5)),
+                      const SizedBox(height: 2),
+                      Text(
+                        "${trade["price"]} ETB",
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18, letterSpacing: -0.2),
                       ),
-                      child: const Text("View Details", style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 13)),
-                    ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () => _openChatHub(context, trade["id"] as String),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0052CC).withOpacity(0.08),
-                        foregroundColor: const Color(0xFF0052CC),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 0,
+                  Row(
+                    children: [
+                      _buildActionButton(
+                        icon: Icons.chat_bubble_outline_rounded,
+                        onTap: () => _openChatHub(context, trade["id"] as String),
+                        color: const Color(0xFF00E676),
                       ),
-                      child: const Text("Secure Chat", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                    ),
-                  ),
+                      const SizedBox(width: 10),
+                      _buildActionButton(
+                        icon: Icons.analytics_outlined,
+                        onTap: () => _openDealTracking(context, trade["id"] as String),
+                        color: const Color(0xFF2F80ED),
+                      ),
+                    ],
+                  )
                 ],
               )
             ],
@@ -238,46 +299,53 @@ class TradeScreen extends StatelessWidget {
     );
   }
 
-  /// Original Minimalist Empty State Placeholder
+  /// Cyber Icon Button Helper Widget
+  Widget _buildActionButton({required IconData icon, required VoidCallback onTap, required Color color}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withOpacity(0.15)),
+        ),
+        child: Icon(icon, color: color, size: 20),
+      ),
+    );
+  }
+
+  /// Gorgeous Minimal Dark Empty State Placeholder View Layout
   Widget _buildEmptyState() {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(30),
+              padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF0D1527),
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 20,
-                  )
-                ],
+                border: Border.all(color: const Color(0xFF151D30)),
               ),
               child: const Icon(
-                Icons.swap_horizontal_circle_outlined, 
-                size: 80, 
-                color: Color(0xFF0052CC)
+                Icons.hourglass_empty_rounded, 
+                size: 50, 
+                color: Color(0xFF64748B)
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             const Text(
-              "No Active Trades",
-              style: TextStyle(
-                fontSize: 20, 
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1D1E)
-              ),
+              "No Locked Pipelines",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             const SizedBox(height: 8),
-            Text(
-              "When you purchase or sell equipment via secure escrow networks, active pipelines live here.",
+            const Text(
+              "Active escrow contracts and hardware transactions you engage in will update live inside this node panel.",
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey.shade500, height: 1.4),
+              style: TextStyle(color: Color(0xFF475569), fontSize: 13, height: 1.5),
             ),
           ],
         ),
@@ -287,13 +355,19 @@ class TradeScreen extends StatelessWidget {
 
   void _openDealTracking(BuildContext context, String transactionId) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Opening timeline log metrics for $transactionId...")),
+      SnackBar(
+        backgroundColor: const Color(0xFF0D1527),
+        content: Text("Pulling ledger node records for $transactionId...", style: const TextStyle(color: Color(0xFF00E676))),
+      ),
     );
   }
 
   void _openChatHub(BuildContext context, String transactionId) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Launching escrow negotiated chat for $transactionId...")),
+      SnackBar(
+        backgroundColor: const Color(0xFF0D1527),
+        content: Text("Connecting encrypted P2P channel for $transactionId...", style: const TextStyle(color: Colors.white)),
+      ),
     );
   }
 }
