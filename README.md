@@ -13,7 +13,7 @@ A secure second-hand marketplace platform where users can safely buy and sell us
 
 * Users can post and manage second-hand items for sale.
 * Categories include tools, electronics, furniture, clothes, Vehicles and more.
-* Buyers can browse, search, and contact sellers directly.
+* Buyers can browse, search by catagories, and contact sellers directly.
 
 ### Secure Wallet System
 
