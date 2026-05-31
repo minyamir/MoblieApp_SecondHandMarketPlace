@@ -34,27 +34,38 @@ class _LoginScreenState extends State<LoginScreen> {
             authProvider.isLoading 
               ? const CircularProgressIndicator()
               : ElevatedButton(
-                 onPressed: () async {
-  // Use .trim() to avoid errors caused by accidental spaces in email
-  final success = await authProvider.login(
-    _emailController.text.trim(), 
-    _passwordController.text.trim(),
-  );
-  
-  if (success && mounted) {
-    Navigator.pushReplacementNamed(context, '/home');
-  } else if (mounted) {
-    // THIS WILL TELL YOU WHY NOTHING IS HAPPENING
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(authProvider.error ?? "Login failed. Check your connection."),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
-}, 
-                  child: const Text("Login")
-                ),
+  onPressed: () async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    // 🧪 HARDCODED MOCK DATA FOR USER TESTING
+    const String testEmail = "test@gmail.com";
+    const String testPassword = "123123";
+
+    if (email == testEmail && password == testPassword) {
+      if (mounted) {
+        // Force navigate to home screen directly
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+      return; // Stop execution here
+    }
+
+    // --- ORIGINAL API CALL PIPELINE FOR PRODUCTION ---
+    final success = await authProvider.login(email, password);
+    
+    if (success && mounted) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(authProvider.error ?? "Login failed. Check your connection."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }, 
+  child: const Text("Login"),
+),
           ],
         ),
       ),

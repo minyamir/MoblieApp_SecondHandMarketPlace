@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      const _HomeDashboardContent(),
+      _HomeDashboardContent(onNavigateToTab: _navigateToTab),
       MarketScreen(),  
       const TradeScreen(),    
       const MyListingsScreen(), 
@@ -41,11 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFF070B19), // Match dark canvas backdrop layout
+      backgroundColor: const Color(0xFF070B19), 
       body: SafeArea(
         child: Column(
           children: [
-            const _TopStatusBadgeBar(),
+            _TopStatusBadgeBar(onProfileTap: () => _navigateToTab(4)), 
             Expanded(
               child: IndexedStack(
                 index: _selectedIndex,
@@ -76,36 +76,36 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
         unselectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
         onTap: _navigateToTab,
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             icon: Padding(
               padding: EdgeInsets.only(bottom: 4),
               child: Icon(Icons.home_filled, size: 26),
             ),
             label: 'Home',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Padding(
               padding: EdgeInsets.only(bottom: 4),
               child: Icon(Icons.business_center_outlined, size: 26),
             ),
             label: 'Market',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Padding(
               padding: EdgeInsets.only(bottom: 4),
               child: Icon(Icons.swap_horizontal_circle_outlined, size: 26),
             ),
             label: 'Trades',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Padding(
               padding: EdgeInsets.only(bottom: 4),
               child: Icon(Icons.storefront_outlined, size: 26),
             ),
             label: 'Listings',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Padding(
               padding: EdgeInsets.only(bottom: 4),
               child: Icon(Icons.person_outline_rounded, size: 26),
@@ -120,7 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 /// Top Status Pill Component
 class _TopStatusBadgeBar extends StatelessWidget {
-  const _TopStatusBadgeBar();
+  final VoidCallback onProfileTap;
+
+  const _TopStatusBadgeBar({required this.onProfileTap});
 
   @override
   Widget build(BuildContext context) {
@@ -141,19 +143,34 @@ class _TopStatusBadgeBar extends StatelessWidget {
               children: const [
                 Icon(Icons.verified_user_outlined, color: Color(0xFF00E676), size: 12),
                 SizedBox(width: 4),
-                Text("ሀሁ Market", style: TextStyle(color: Color(0xFF00E676), fontSize: 12, fontWeight: FontWeight.bold)),
+                Text(
+                  "ሀሁ Market", 
+                  style: TextStyle(color: Color(0xFF00E676), fontSize: 12, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),
-          Row(
-            children: [
-              Container(width: 4, height: 4, decoration: const BoxDecoration(color: Colors.white54, shape: BoxShape.circle)),
-              const SizedBox(width: 3),
-              Container(width: 4, height: 4, decoration: const BoxDecoration(color: Colors.white54, shape: BoxShape.circle)),
-              const SizedBox(width: 3),
-              Container(width: 18, height: 10, decoration: BoxDecoration(border: Border.all(color: Colors.white54), borderRadius: BorderRadius.circular(2))),
-            ],
-          )
+          GestureDetector(
+            onTap: onProfileTap,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: const Color(0xFF00E676).withOpacity(0.4), 
+                  width: 1.5,
+                ),
+              ),
+              child: const CircleAvatar(
+                radius: 18,
+                backgroundColor: Color(0xFF151D30),
+                child: Icon(
+                  Icons.person_outline, 
+                  color: Colors.white70, 
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -162,7 +179,9 @@ class _TopStatusBadgeBar extends StatelessWidget {
 
 /// Core Dashboard Body View
 class _HomeDashboardContent extends StatelessWidget {
-  const _HomeDashboardContent();
+  final Function(int) onNavigateToTab;
+
+  const _HomeDashboardContent({required this.onNavigateToTab});
 
   @override
   Widget build(BuildContext context) {
@@ -211,11 +230,11 @@ class _HomeDashboardContent extends StatelessWidget {
             ),
           ),
 
-          // Three Metric Cards Row
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+          // Metric Cards Row
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
-              children: [
+              children: const [
                 Expanded(
                   child: _MetricCard(
                     icon: Icons.shield_outlined,
@@ -247,13 +266,10 @@ class _HomeDashboardContent extends StatelessWidget {
           ),
 
           const SizedBox(height: 20),
-
-          // Trade Volume Chart Component
           const _TradeVolumeGraphCard(),
-
           const SizedBox(height: 28),
           
-          // Section Heading Row
+          // Section Heading: Featured Products
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
@@ -263,12 +279,15 @@ class _HomeDashboardContent extends StatelessWidget {
                   "Top Rated Equipment", 
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
                 ),
-                Row(
-                  children: const [
-                    Text("See all", style: TextStyle(color: Color(0xFF00E676), fontSize: 15, fontWeight: FontWeight.w600)),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF00E676), size: 12),
-                  ],
+                GestureDetector(
+                  onTap: () => onNavigateToTab(1), // Navigates to Market Screen
+                  child: Row(
+                    children: const [
+                      Text("See all", style: TextStyle(color: Color(0xFF00E676), fontSize: 15, fontWeight: FontWeight.w600)),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF00E676), size: 12),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -277,9 +296,17 @@ class _HomeDashboardContent extends StatelessWidget {
           const SizedBox(height: 16),
           const _FeaturedToolsHorizontalList(),
 
-          const SizedBox(height: 24),
-          const _PlatformServicesShowcase(),
-          const SizedBox(height: 30),
+          const SizedBox(height: 32),
+          
+          // NEW SECTION: How to use the App
+          const _HowToUseSection(),
+
+          const SizedBox(height: 32),
+
+          // NEW SECTION: Value Props (Why Choose Me?)
+          const _WhyChooseUsSection(),
+          
+          const SizedBox(height: 40),
         ],
       ),
     );
@@ -436,26 +463,71 @@ class _FeaturedToolsHorizontalList extends StatelessWidget {
     final provider = context.watch<ListingsProvider>();
 
     if (provider.isLoading && provider.listings.isEmpty) {
-      return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00E676))));
+      return const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00E676)),
+        ),
+      );
     }
 
+    final int itemsCount = provider.listings.isEmpty ? 4 : provider.listings.length;
+
     return SizedBox(
-      height: 200,
+      height: 210,
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        itemCount: provider.listings.isEmpty ? 3 : provider.listings.length,
+        itemCount: itemsCount,
         itemBuilder: (context, index) {
-          final title = provider.listings.isEmpty ? "Heavy Drill" : provider.listings[index].title;
-          final price = provider.listings.isEmpty ? "1,200" : "${provider.listings[index].price}";
+          String title = "Market Item";
+          String price = "0";
+          String? resolvedUrl;
+
+          if (provider.listings.isEmpty) {
+            final List<Map<String, dynamic>> mockData = [
+              {
+                "title": "Sony A7III Mirrorless Ca...",
+                "price": "ETB 42,500",
+                "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=300",
+              },
+              {
+                "title": "MacBook Pro M2 14\" 512...",
+                "price": "ETB 87,000",
+                "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300",
+              },
+              {
+                "title": "Pioneer HiFi Sound System",
+                "price": "ETB 18,500",
+                "image": "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=300",
+              },
+              {
+                "title": "Nikon D850 DSLR Kit",
+                "price": "ETB 68,000",
+                "image": "https://images.unsplash.com/photo-1606486668508-34636b2d2777?w=300",
+              }
+            ];
+            
+            title = mockData[index]["title"] as String;
+            price = mockData[index]["price"] as String;
+            resolvedUrl = mockData[index]["image"] as String;
+          } else {
+            final item = provider.listings[index];
+            title = item.title ?? "Market Item";
+            if (item.price != null) {
+              price = item.price.toString().contains('ETB') ? "${item.price}" : "ETB ${item.price}";
+            }
+            if (item.images != null && item.images!.isNotEmpty) {
+              resolvedUrl = item.images![0].toString();
+            }
+          }
 
           return Container(
             width: 160,
             margin: const EdgeInsets.only(right: 14),
             decoration: BoxDecoration(
               color: const Color(0xFF0D1527),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(24),
               border: Border.all(color: const Color(0xFF151D30)),
             ),
             child: Column(
@@ -464,13 +536,20 @@ class _FeaturedToolsHorizontalList extends StatelessWidget {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.all(6),
+                    width: double.infinity,
                     decoration: BoxDecoration(
                       color: const Color(0xFF151D30),
-                      borderRadius: BorderRadius.circular(16),
-                      image: const DecorationImage(
-                        image: NetworkImage('https://via.placeholder.com/150'),
-                        fit: BoxFit.cover,
-                      ),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: resolvedUrl != null && resolvedUrl.startsWith('http')
+                          ? Image.network(
+                              resolvedUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => _buildImageErrorView(),
+                            )
+                          : _buildImageErrorView(),
                     ),
                   ),
                 ),
@@ -479,9 +558,9 @@ class _FeaturedToolsHorizontalList extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, maxLines: 1, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
+                      Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white)),
                       const SizedBox(height: 4),
-                      Text("$price ETB", style: const TextStyle(color: Color(0xFF00E676), fontWeight: FontWeight.bold, fontSize: 13)),
+                      Text(price, style: const TextStyle(color: Color(0xFF00E676), fontWeight: FontWeight.w900, fontSize: 13)),
                     ],
                   ),
                 ),
@@ -492,55 +571,118 @@ class _FeaturedToolsHorizontalList extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildImageErrorView() {
+    return Container(
+      color: const Color(0xFF151D30),
+      child: Icon(Icons.broken_image_outlined, color: const Color(0xFF64748B).withOpacity(0.5), size: 24),
+    );
+  }
 }
 
-/// Bottom Features Showcase (Why Choose Us) - Fixed explicit cast issues
-class _PlatformServicesShowcase extends StatelessWidget {
-  const _PlatformServicesShowcase();
+/// NEW UI COMPONENT: "How to Use" Step-by-Step Walkthrough
+class _HowToUseSection extends StatelessWidget {
+  const _HowToUseSection();
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> services = [
-      {"icon": Icons.gpp_good_rounded, "title": "AI Identity Check", "desc": "National ID & biometric user validation verification flow."},
-      {"icon": Icons.account_balance_wallet_rounded, "title": "Secure Escrow Wallet", "desc": "Safe asset protection secure fund storage options."}
+    final List<Map<String, String>> steps = [
+      {"step": "1", "title": "Verify Identity", "body": "Complete your biometric KYC check to become a verified trader."},
+      {"step": "2", "title": "List or Browse Items", "body": "Post items for sale or search high-quality gear in the marketplace."},
+      {"step": "3", "title": "Transact with Escrow", "body": "Funds stay locked safely in escrow until delivery is verified by both sides."}
     ];
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
-        children: services.map((srv) {
-          return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF0D1527),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF151D30)),
-            ),
-            child: Row(
-              children: [
-                Icon(srv["icon"] as IconData, color: const Color(0xFF00E676), size: 24),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        srv["title"] as String, // 👈 FIXED: Explicitly casted to String
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        srv["desc"] as String, // 👈 FIXED: Explicitly casted to String
-                        style: const TextStyle(fontSize: 12, color: Color(0xFF475569)),
-                      ),
-                    ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("How It Works", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5)),
+          const SizedBox(height: 16),
+          ...steps.map((item) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 14,
+                    backgroundColor: const Color(0xFF00E676),
+                    child: Text(item["step"]!, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
                   ),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(item["title"]!, style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        Text(item["body"]!, style: const TextStyle(color: Color(0xFF64748B), fontSize: 13, height: 1.3)),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          }).toList(),
+        ],
+      ),
+    );
+  }
+}
+
+/// NEW UI COMPONENT: "Why Choose Us" Value Propositions
+class _WhyChooseUsSection extends StatelessWidget {
+  const _WhyChooseUsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> perks = [
+      {"icon": Icons.gpp_good_rounded, "title": "100% Peer Accountability", "desc": "No anonymous listings. Every user maps directly to an authenticated real-world identity check."},
+      {"icon": Icons.account_balance_wallet_rounded, "title": "Secure Escrow Core", "desc": "Eliminate purchase anxiety. Payment is only dispatched upon successful product handoff."},
+      {"icon": Icons.bolt_rounded, "title": "Zero Hidden Fees", "desc": "Transparent transaction fees built natively for local Ethiopian trade systems."}
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Why Choose ሀሁ Market?", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5)),
+          const SizedBox(height: 16),
+          ...perks.map((perk) {
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0D1527),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF151D30)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: const Color(0xFF00E676).withOpacity(0.06), shape: BoxShape.circle),
+                    child: Icon(perk["icon"] as IconData, color: const Color(0xFF00E676), size: 20),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(perk["title"] as String, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
+                        const SizedBox(height: 4),
+                        Text(perk["desc"] as String, style: const TextStyle(fontSize: 12, color: Color(0xFF475569), height: 1.3)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ],
       ),
     );
   }

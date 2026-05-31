@@ -18,6 +18,13 @@ import '../../features/listings/data/repositories/listings_repository_impl.dart'
 import '../../features/listings/domain/repositories/listings_repository.dart';
 import '../../features/listings/presentation/provider/listings_provider.dart';
 
+// Chat Importsr
+import '../../features/chat/data/datasources/chat_remote_datasource.dart';
+import '../../features/chat/data/repositories/chat_repository_impl.dart';
+import '../../features/chat/domain/repositories/chat_repository.dart';
+import '../../features/chat/presentation/provider/chat_bloc.dart';
+
+
 import '../../features/home/home_injection.dart';
 
 final sl = GetIt.instance;
@@ -41,7 +48,10 @@ initHome(); // Initialize Home feature dependencies
  
 sl.registerLazySingleton<ListingsRepository>(() => ListingsRepositoryImpl(sl()));
   sl.registerLazySingleton(() => ListingsRemoteDataSource(sl()));
-
+// Core/DI Injection Configuration Block for the Chat Feature Module
+sl.registerFactory(() => ChatBloc(repository: sl()));
+sl.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(remoteDataSource: sl()));
+sl.registerLazySingleton<ChatRemoteDataSource>(() => ChatRemoteDataSourceImpl());
   // --- CORE ---
   sl.registerLazySingleton(() => ApiClient());
 }
