@@ -33,6 +33,7 @@ dependencies:
   # Env variables
   flutter_dotenv: ^5.1.0
   socket_io_client: ^3.1.4
+  google_mlkit_face_detection: ^0.13.2
 
 dev_dependencies:
   flutter_test:

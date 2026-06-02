@@ -102,25 +102,36 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     // User Identity Labels Matrix
-                    const Text(
-                      "Bereket Alemu",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "@bereket.alemu  •  Member since Jan 2025",
-                      style: TextStyle(
-                        color: Color(0xFF64748B),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-
+GestureDetector(
+  onTap: () {
+    // Navigates using the setup configured in your main.routes block
+    Navigator.pushNamed(context, '/verification');
+  },
+  behavior: HitTestBehavior.opaque, // Ensures the entire text layout area detects taps cleanly
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        "Bereket Alemu",
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          letterSpacing: -0.5,
+        ),
+      ),
+      const SizedBox(height: 4),
+      const Text(
+        "@bereket.alemu  •  Member since Jan 2025",
+        style: TextStyle(
+          color: Color(0xFF64748B),
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ],
+  ),
+),
                     const SizedBox(height: 16),
 
                     // 2. KYC VERIFIED RIBBON BADGE BUTTON

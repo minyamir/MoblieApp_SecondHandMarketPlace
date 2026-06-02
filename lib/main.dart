@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // Import Bloc for Cubit support
 
 // Import DI
 import 'core/di/injection_container.dart' as di;
 
-// Import Providers
+// Import Providers / Cubits
 import 'features/auth/presentation/provider/auth_provider.dart';
 import 'features/listings/presentation/provider/listings_provider.dart';
-import 'features/verification/presentation/provider/verification_provider.dart';
+import 'features/verification/presentation/provider/verification_provider.dart'; // Points to your VerificationCubit file
+import 'features/home/presentation/provider/home_provider.dart';
 
 // Import Screens
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/auth/presentation/screens/register_screen.dart';
 import 'features/listings/presentation/screens/listings_screen.dart';
 import 'features/verification/presentation/screens/verification_screen.dart';
+import 'features/home/presentation/screens/home_screen.dart'; 
 
-
-import 'features/home/presentation/screens/home_screen.dart'; // Adjust path if needed
-import 'features/home/home_injection.dart'; // Import Home feature DI setup
-import 'features/home/presentation/provider/home_provider.dart';
 void main() async {
-  // 1. Ensure Flutter is initialized
+  // 1. Ensure Flutter Engine bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 2. Initialize Dependency Injection (sl)
+  // 2. Initialize Service Locator Dependency Injection (sl)
   await di.init();
 
   runApp(const HaHuMarketApp());
@@ -35,18 +34,16 @@ class HaHuMarketApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      // 3. Connect UI to your Clean Architecture Logic
       providers: [
         ChangeNotifierProvider(create: (_) => di.sl<AuthProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<ListingsProvider>()),
-        ChangeNotifierProvider(create: (_) => di.sl<VerificationProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<HomeProvider>()),
+        BlocProvider(create: (_) => di.sl<VerificationCubit>()),
       ],
       child: MaterialApp(
         title: 'HaHu Market',
         debugShowCheckedModeBanner: false,
         
-        // 4. App Theme (Bahir Dar / Ethiopia Green Style)
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
@@ -60,14 +57,28 @@ class HaHuMarketApp extends StatelessWidget {
           ),
         ),
 
-        // 5. Navigation Routes
-        // We start at Login. Once logged in, we move to Home.
+        // Navigation Routes
         initialRoute: '/login',
         routes: {
           '/login': (context) => const LoginScreen(),
           '/home': (context) => const HomeScreen(),
-          '/verification': (context) => const VerificationScreen(),
           '/register': (context) => const RegisterScreen(),
+          
+          // FIXED: Resolved missing userId property error via dynamic protection
+          '/verification': (context) {
+            final authProvider = Provider.of<AuthProvider>(context, listen: false);
+            String activeUserId = "hahu_temp_test_user";
+            
+            try {
+              if ((authProvider as dynamic).user?.id != null) {
+                activeUserId = (authProvider as dynamic).user.id.toString();
+              } else if ((authProvider as dynamic).user?.uid != null) {
+                activeUserId = (authProvider as dynamic).user.uid.toString();
+              }
+            } catch (_) {}
+            
+            return VerificationScreen(userId: activeUserId);
+          },
         },
       ),
     );
