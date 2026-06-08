@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return; // Stop execution here
     }
 
-    // --- ORIGINAL API CALL PIPELINE FOR PRODUCTION ---
+    //  ORIGINAL API CALL PIPELINE FOR PRODUCTION ---
     final success = await authProvider.login(email, password);
     
     if (success && mounted) {
