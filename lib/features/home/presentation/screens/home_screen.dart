@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-/// Top Status Pill Component
+/// Top Status Pill Component...
 class _TopStatusBadgeBar extends StatelessWidget {
   final VoidCallback onProfileTap;
 
