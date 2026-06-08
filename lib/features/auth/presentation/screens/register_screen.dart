@@ -44,7 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 30),
               
-              // Full Name Field
+              // Full Name Field..
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
