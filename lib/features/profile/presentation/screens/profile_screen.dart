@@ -5,7 +5,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // URL fallback example string - replace this with your dynamic state model pointer if needed (e.g., user.profileImageUrl)
+    // URL fallback example string -replace this with your dynamic state model pointer if needed (e.g., user.profileImageUrl)
     const String? profileImageUrl = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400';
 
     return Scaffold(
