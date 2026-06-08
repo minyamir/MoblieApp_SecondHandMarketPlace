@@ -13,7 +13,7 @@ class ProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Top Action Settings Icon Row Frame
+            // Top Action Settings Icon Row Frame.
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
               child: Align(
