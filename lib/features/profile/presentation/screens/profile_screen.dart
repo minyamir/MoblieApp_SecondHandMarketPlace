@@ -9,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
     const String? profileImageUrl = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400';
 
     return Scaffold(
-      backgroundColor: const Color(0xFF070B19), // Dark background matching HaHu ecosystem design
+      backgroundColor: const Color(0xFF070B19), //. Dark background matching HaHu ecosystem design
       body: SafeArea(
         child: Column(
           children: [
