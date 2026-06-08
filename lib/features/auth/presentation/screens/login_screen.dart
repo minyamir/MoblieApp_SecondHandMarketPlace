@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    // 🧪 HARDCODED MOCK DATA FOR USER TESTING
+    //  HARDCODED MOCK DATA FOR USER TESTING
     const String testEmail = "test@gmail.com";
     const String testPassword = "123123";
 
