@@ -11,7 +11,7 @@ class VerificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Shared consistent premium palette tokens.
+    // Shared consistent premium palette 
     const Color bgCanvas = Color(0xFF0B0C0E);       // Match dark deep home background
     const Color cardSurface = Color(0xFF14161A);    // Secondary container panel 
     const Color brandGold = Color(0xFFF3C02B);      // Bybit Premium Dynamic Accent Gold
