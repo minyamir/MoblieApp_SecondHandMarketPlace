@@ -6,7 +6,7 @@ A secure second-hand marketplace platform where users can safely buy and sell us
 
 ### User Verification
 
-* Users register using their National ID for identity verification.
+* Users register using their NationalId 🪪 for identity verification.
 * Verified accounts increase trust and reduce fake users and fraud.
 
 ### Second-Hand Product Marketplace
