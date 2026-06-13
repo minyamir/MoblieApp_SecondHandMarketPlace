@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context.read<ListingsProvider>().loadListings();
     });
   }
-//for GitHub green 💚 
+//for GitHub green graph💚 
   void _navigateToTab(int index) {
     setState(() {
       _selectedIndex = index;
