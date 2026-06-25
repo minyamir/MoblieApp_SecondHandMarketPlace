@@ -1,6 +1,6 @@
 # Second-Hand Marketplace System
 
-
+A secure second-hand marketplace platform where users can safely buy and sell used products with identity verification, real-time chat, 🔐 secure wallet transactions, # GPS-based delivery 🚚 tracking, and intelligent 🧠 scam detection.
 
 ## Main Features
 
