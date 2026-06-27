@@ -6,18 +6,21 @@ A modern and secure **second-hand marketplace mobile application** that enables 
 
 ## 📱 App Preview
 
-<p align="center">
-  <img src="images/Home.jpg" width="180"/>
-  <img src="images/Home2.jpg" width="180"/>
-  <img src="images/Identity.jpg" width="180"/>
-  <img src="images/Identitity2.jpg" width="180"/>
-</p>
+|                  🏠 Home                 |                🏠 Home Feed               |
+| :--------------------------------------: | :---------------------------------------: |
+| <img src="images/Home.jpg" width="260"/> | <img src="images/Home2.jpg" width="260"/> |
 
-<p align="center">
-  <img src="images/Market.jpg" width="180"/>
-  <img src="images/Listings.jpg" width="180"/>
-  <img src="images/Trade.jpg" width="180"/>
-</p>
+|           🪪 Identity Verification           |              ✅ Verification Status              |
+| :------------------------------------------: | :---------------------------------------------: |
+| <img src="images/Identity.jpg" width="260"/> | <img src="images/Identitity2.jpg" width="260"/> |
+
+|               🛍️ Marketplace              |              📋 Product Listings             |
+| :----------------------------------------: | :------------------------------------------: |
+| <img src="images/Market.jpg" width="260"/> | <img src="images/Listings.jpg" width="260"/> |
+
+|                 🤝 Trading                |
+| :---------------------------------------: |
+| <img src="images/Trade.jpg" width="260"/> |
 
 ---
 
