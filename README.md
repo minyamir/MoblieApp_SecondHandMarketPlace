@@ -11,13 +11,13 @@ A modern and secure **second-hand marketplace mobile application** that enables 
 |:-------:|:------------:|:------------------------:|
 | <img src="images/Home.jpg" width="220"/> | <img src="images/Home2.jpg" width="220"/> | <img src="images/Market.jpg" width="220"/> |
 
-| ✅ Verification Status |  🪪 Identity Verification | 📋 Product Listings |
+| 🤝 Trading ✅ Verification Status |  🪪 Identity Verification | 📋 Product Listings |
 |:----------------------:|:---------------:|:-------------------:|
-| <img src="images/Identitiy2.jpg" width="220"/> |  <img src="images/Identity.jpg" width="220"/>  | <img src="images/Listings.jpg" width="220"/> |
+|  <img src="images/Trade.jpg" width="220"/>  |  <img src="images/Identity.jpg" width="220"/>  | <img src="images/Listings.jpg" width="220"/> |
 
-| 🤝 Trading |  |  |
-|:----------:|:--:|:--:|
-| <img src="images/Trade.jpg" width="220"/> |  |  |
+| ✅ Verification Status |  
+|:----------:|
+|<img src="images/Identitiy2.jpg" width="220"/> |
 ```
 
 ---
