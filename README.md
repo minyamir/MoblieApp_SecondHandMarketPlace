@@ -15,7 +15,7 @@ A modern and secure **second-hand marketplace mobile application** that enables 
 |:----------------------:|:---------------:|:-------------------:|
 |  <img src="images/Trade.jpg" width="220"/>  | <img src="images/Listings.jpg" width="220"/> |  <img src="images/Identity.jpg" width="220"/>  |
 
-| ✅ Verification Status |  
+| ✅ Wallet Status |  
 |:----------:|
 |<img src="images/Identitiy2.jpg" width="220"/> |
 ```
