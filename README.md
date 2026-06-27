@@ -1,56 +1,115 @@
-# Second-Hand Marketplace System
+# 🛍️ Second-Hand Marketplace System
 
-A secure second-hand marketplace platform where users can safely buy and sell used products with identity verification, real-time chat, 🔐 secure wallet transactions, # GPS-based delivery 🚚 tracking, and intelligent 🧠 scam detection.
+A modern and secure **second-hand marketplace mobile application** that enables users to buy and sell pre-owned products with confidence. The platform combines **identity verification**, **secure wallet transactions**, **real-time messaging**, **GPS-based delivery tracking**, and **AI-powered scam detection** to create a trusted and intelligent marketplace.
 
-## Main Features
+---
 
-### User Verification
+# 📱 App Screenshots
 
-* Users register using their NationalId 🪪 for identity verification.
-* Verified accounts increase trust and reduce fake users and fraud.
+## Home
 
-### Second-Hand Product Marketplace
+<p align="center">
+  <img src="images/Home.jpg" width="220"/>
+  <img src="images/Home2.jpg" width="220"/>
+</p>
 
-* Users can post and manage second-hand items for sale.
-* Categories include tools, electronics, furniture, clothes, Vehicles and more.
-* Buyers can browse, search by catagories, and contact sellers directly.
+## Identity Verification
 
-### Secure Wallet System
+<p align="center">
+  <img src="images/Identity.jpg" width="220"/>
+  <img src="images/Identitity2.jpg" width="220"/>
+</p>
 
-* Integrated wallet for safe payments between buyers and sellers.
-* Funds are protected during transactions until delivery is completed.
-* Reduces payment scams and improves transaction security.
+## Marketplace
 
-### Real-Time Chat System
+<p align="center">
+  <img src="images/Market.jpg" width="220"/>
+  <img src="images/Listings.jpg" width="220"/>
+</p>
 
-* Buyers and sellers communicate through an in-app messaging system.
-* Supports negotiation, product discussion, and delivery coordination.
+## Trading
 
-### AI Scam & Illegal Activity Detection
+<p align="center">
+  <img src="images/Trade.jpg" width="220"/>
+</p>
 
-* The system monitors chat messages to detect:
+---
 
-  * Scam attempts
-  * Fraudulent behavior
-  * Illegal trading
-  * Harmful or suspicious language
-* Suspicious messages are automatically blocked.
-* Users who violate rules receive warnings or temporary restrictions.
+# ✨ Main Features
 
-### GPS Delivery Tracking
+## 🔐 User Verification
 
-* Delivery system with live GPS tracking.
-* Buyers can track the location of deliveries in real time.
-* Improves delivery transparency and safety.
+* Register using a National ID for secure identity verification.
+* Verified users increase trust and reduce fraudulent activities.
+* Prevent fake accounts and improve marketplace security.
 
-### Safety & Moderation
+## 🛒 Second-Hand Marketplace
 
-* Automated moderation system helps maintain a safe marketplace.
-* Repeat offenders can be suspended or banned.
-* Admin dashboard for monitoring reports and platform activity.
+* Buy and sell second-hand products with ease.
+* Create, edit, and manage product listings.
+* Browse products by category.
+* Search and filter listings.
+* Contact sellers directly.
 
-## Goal of the Project
+Supported categories include:
 
-The goal of this platform is to create a trusted, secure, and intelligent digital marketplace for second-hand products by combining identity verification, secure payments, smart moderation, and real-time tracking technologies.
+* 📱 Electronics
+* 🚗 Vehicles
+* 🪑 Furniture
+* 👕 Clothing
+* 🛠️ Tools
+* 📚 Books
+* 📦 And many more.
 
-As the same time We are going to build the Advanced  moblie App.
+## 💰 Secure Wallet System
+
+* Built-in digital wallet for secure transactions.
+* Buyer payments are protected until the order is successfully completed.
+* Reduces payment fraud and increases transaction security.
+
+## 💬 Real-Time Chat
+
+* Instant messaging between buyers and sellers.
+* Product negotiation.
+* Delivery coordination.
+* Fast and reliable communication.
+
+## 🤖 AI Scam & Illegal Activity Detection
+
+Artificial Intelligence continuously monitors conversations to detect:
+
+* Scam attempts
+* Fraudulent activities
+* Illegal trading
+* Harmful or suspicious language
+
+The system can automatically:
+
+* Block suspicious messages
+* Warn users
+* Restrict repeat offenders
+* Help maintain a safe marketplace environment
+
+## 📍 GPS Delivery Tracking
+
+* Live GPS tracking for deliveries.
+* Real-time location updates.
+* Delivery status monitoring.
+* Improved transparency and customer confidence.
+
+## 🛡️ Safety & Moderation
+
+* Automated content moderation.
+* User reporting system.
+* Admin dashboard for monitoring activities.
+* Suspension or banning of users who repeatedly violate platform rules.
+
+---
+
+# 🎯 Project Goal
+
+Our goal is to build a **trusted, secure, and intelligent second-hand marketplace** that provides a seamless experience for buying and selling pre-owned products.
+
+By combining **identity verification**, **secure wallet payments**, **AI-powered scam detection**, **real-time communication**, and **GPS delivery tracking**, we aim to create a marketplace where users can trade with confidence and safety.
+
+This project is being developed as an **advanced cross-platform mobile application** with a strong focus on security, scalability, user experience, and modern software architecture.
