@@ -18,9 +18,7 @@ A modern and secure **second-hand marketplace mobile application** that enables 
 | ✅ Wallet Status |  
 |:----------:|
 |<img src="images/Identitiy2.jpg" width="220"/> |
-```
 
----
 
 ## ✨ Features
 
